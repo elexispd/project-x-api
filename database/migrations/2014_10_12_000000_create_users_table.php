@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('profile_photo')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('status', ['pending', 'active', 'inactive', 'suspended'])->default('pending');
             $table->rememberToken();
             $table->timestamps();
         });

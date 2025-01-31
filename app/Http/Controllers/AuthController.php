@@ -15,22 +15,28 @@ class AuthController extends Controller
 {
     use HttpResponses;
     public function register(RegisterUserRequest $request) {
-        $request->validated($request->all());
+        $validatedData = $request->validated();
+        $status = $request->role == 'admin' ? 'active' : 'pending';
+
+        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
             'role' => $request->role,
+            'status' => $status, // Set status based on the role
             'password' => Hash::make($request->password),
         ]);
+
+        // Generate a token for the user
+        $token = $user->createToken('authToken'.$user->id)->plainTextToken;
+
+        // Return a success response with the user and token
         return $this->successResponse([
             'user' => $user,
-            'token' => $user->createToken('authToken'.$user->id)->plainTextToken,
-
+            'token' => $token,
         ]);
-
-
     }
 
     public function login(LoginUserRequest $request) {
