@@ -22,9 +22,13 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('status', ['pending', 'active', 'inactive', 'suspended'])->default('pending');
+            $table->string('verification_code')->nullable(); // New field
+            $table->timestamp('verification_expires_at')->nullable(); // New field
             $table->rememberToken();
             $table->timestamps();
         });
+
+
     }
 
     /**
